@@ -1,0 +1,16 @@
+.profile__avatar-wrap{
+  position: relative;
+  display: flex;
+}
+
+.profile__avatar-wrap:hover::after{
+  content: '';
+  position: absolute;  
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.8) url(../../../images/pen.svg) center center no-repeat;
+
+}
+
+
