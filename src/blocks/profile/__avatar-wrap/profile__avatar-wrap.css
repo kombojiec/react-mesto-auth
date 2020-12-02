@@ -1,6 +1,7 @@
 .profile__avatar-wrap{
   position: relative;
   display: flex;
+  border-radius: 50%;
 }
 
 .profile__avatar-wrap:hover::after{
