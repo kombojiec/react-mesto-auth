@@ -11,7 +11,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(false); 
+  const [selectedCard, setSelectedCard] = useState(null); 
   
 
   const handleAddPlace = ()=> setIsAddPlacePopupOpen(true);  
@@ -31,7 +31,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   };
 
   const closePopupOutside =(event)=>{
@@ -43,18 +43,21 @@ function App() {
   const escapeOutside = (event)=>{
     if(event.key === 'Escape'){
     closeAllPopups();
+    console.log('closed');
     }
   };
 
   useEffect(()=>{
     if(isPopupOpen){
       window.addEventListener('keydown', escapeOutside);
+      console.log('added');
     }
 
     return() =>{
       window.removeEventListener('keydown', escapeOutside);
+      console.log('removed');
     } 
-  });
+  },[]);
   
   return (
     <div className="App page" >

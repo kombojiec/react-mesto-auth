@@ -2,12 +2,8 @@ import React from  'react';
 
 const PopupWithForm = (props) => {
 
-  const classes = ['popup', `popup_${props.name}`];
-
-  if(props.isOpen){classes.push('popup_opened');}
-
   return(
-    <section className={classes.join(' ')} onClick={props.onOutsideClose}>
+    <section className={`popup popup_${props.name} ${props.isOpen && 'popup_opened'}`} onClick={props.onOutsideClose}>
       <form action="#" className="popup__form" noValidate>
         <h2 className="popup__title">{props.title} </h2>
         {props.children}

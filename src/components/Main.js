@@ -4,9 +4,9 @@ import Card from './Card';
 
 const Main = (props) => {
 
-  const[userAvatar, setUserAvatar] = useState('');
-  const[userName, setUserName] = useState('');
-  const[userDescription, setUserDescription] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userDescription, setUserDescription] = useState('');
   const [cards, setCards] = useState([]);
 
   useEffect(()=>{
@@ -19,13 +19,11 @@ const Main = (props) => {
   },[]);
 
   useEffect(()=>{
-    if(cards.length === 0){
-      api.getCards()
-      .then(promise =>{
-        setCards(promise.map(item => item));
-      },[cards]);
-    }
-  });
+    api.getCards()
+    .then(promise =>{
+      setCards(promise.map(item => item));
+    },[]);
+  },[]);
 
 
   return(
