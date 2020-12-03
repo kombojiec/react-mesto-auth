@@ -56,8 +56,9 @@ function App() {
     return() =>{
       window.removeEventListener('keydown', escapeOutside);
       console.log('removed');
-    } 
+    }; 
   },[]);
+
   
   return (
     <div className="App page" >
