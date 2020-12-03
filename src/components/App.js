@@ -19,13 +19,13 @@ function App() {
   const handleEditProfile = ()=> setIsEditProfilePopupOpen(true);
   const handleCardClick = (card)=> {setSelectedCard(card);};
 
-  const isPopupOpen = ()=>{
-    if(isEditAvatarPopupOpen || 
-      isEditProfilePopupOpen || 
-      selectedCard ||
-      isAddPlacePopupOpen){return true;}
-    return false;
-  };
+  // const isPopupOpen = ()=>{
+  //   if(isEditAvatarPopupOpen || 
+  //     isEditProfilePopupOpen || 
+  //     selectedCard ||
+  //     isAddPlacePopupOpen){return true;}
+  //   return false;
+  // };
 
   const closeAllPopups = ()=>{
     setIsEditAvatarPopupOpen(false);
@@ -40,29 +40,36 @@ function App() {
     }
   };
 
-  const escapeOutside = (event)=>{
-    if(event.key === 'Escape'){
-    closeAllPopups();
-    console.log('closed');
-    }
-  };
 
   useEffect(()=>{
-    if(isPopupOpen){
-      window.addEventListener('keydown', escapeOutside);
-      console.log('added');
+
+    const popupOpened = ()=>{
+      if(isEditAvatarPopupOpen || 
+        isEditProfilePopupOpen || 
+        selectedCard ||
+        isAddPlacePopupOpen){return true;}
+      return false;
+    };
+    
+    const escapeOutside = (event)=>{
+      if(event.key === 'Escape'){
+      closeAllPopups();
+      }
+    };
+
+    if(popupOpened()){
+      document.addEventListener('keydown', escapeOutside);
     }
 
-    return() =>{
-      window.removeEventListener('keydown', escapeOutside);
-      console.log('removed');
-    }; 
-  },[]);
+    return()=>{
+      document.removeEventListener('keydown', escapeOutside);
+    };    
 
-  
+  },[isEditAvatarPopupOpen, isEditProfilePopupOpen, selectedCard, isAddPlacePopupOpen]);
+
   return (
     <div className="App page" >
-      <div className="page__container" onKeyDown={escapeOutside} >  
+      <div className="page__container"  >  
   
         <Header />
 
