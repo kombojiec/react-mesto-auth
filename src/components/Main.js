@@ -15,14 +15,16 @@ const Main = (props) => {
       setUserAvatar(promise.avatar);
       setUserName(promise.name);
       setUserDescription(promise.about);
-    });    
+    })
+    .catch(result => console.error(result));    
   },[]);
 
   useEffect(()=>{
     api.getCards()
     .then(promise =>{
       setCards(promise.map(item => item));
-    },[]);
+    })
+    .catch(result => console.error(result));
   },[]);
 
 

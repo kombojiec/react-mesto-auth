@@ -19,13 +19,7 @@ function App() {
   const handleEditProfile = ()=> setIsEditProfilePopupOpen(true);
   const handleCardClick = (card)=> {setSelectedCard(card);};
 
-  // const isPopupOpen = ()=>{
-  //   if(isEditAvatarPopupOpen || 
-  //     isEditProfilePopupOpen || 
-  //     selectedCard ||
-  //     isAddPlacePopupOpen){return true;}
-  //   return false;
-  // };
+
 
   const closeAllPopups = ()=>{
     setIsEditAvatarPopupOpen(false);
