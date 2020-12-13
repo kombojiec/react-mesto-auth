@@ -1,23 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import api from '../utils/Api';
 import Card from './Card';
+import CurrentUserContext from '../contexts/CurrentUserContext'
 
 const Main = (props) => {
 
-  const [userAvatar, setUserAvatar] = useState('');
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
+  // const [userAvatar, setUserAvatar] = useState('');
+  // const [userName, setUserName] = useState('');
+  // const [userDescription, setUserDescription] = useState('');
   const [cards, setCards] = useState([]);
+  const currentUser = useContext(CurrentUserContext);
 
-  useEffect(()=>{
-    api.getUser()
-    .then(promise => {
-      setUserAvatar(promise.avatar);
-      setUserName(promise.name);
-      setUserDescription(promise.about);
-    })
-    .catch(result => console.error(result));    
-  },[]);
+  // useEffect(()=>{
+  //   api.getUser()
+  //   .then(promise => {
+  //     setUserAvatar(promise.avatar);
+  //     setUserName(promise.name);
+  //     setUserDescription(promise.about);
+  //   })
+  //   .catch(result => console.error(result));    
+  // },[]);
 
   useEffect(()=>{
     api.getCards()
@@ -34,15 +36,15 @@ const Main = (props) => {
       <section className="profile">
         <div className="profile__items">
           <div className="profile__avatar-wrap" onClick={props.onEditAvatar}>
-            <img src={userAvatar} alt={userName} className="profile__avatar" />
+            <img src={currentUser.avatar} alt={currentUser.name} className="profile__avatar" />
           </div>
           <div className="profile__info">
             <div className="profile__author">
               <div className="profile__name-wrap">
-                <h1 className="profile__name">{userName}</h1>
+                <h1 className="profile__name">{currentUser.name}</h1>
                 <button className="button profile__edit-button" type="button" onClick={props.onEditProfile} ></button>
               </div>              
-                <p className="profile__business">{userDescription}</p>
+                <p className="profile__business">{currentUser.about}</p>
             </div>            
           </div>
         </div>
