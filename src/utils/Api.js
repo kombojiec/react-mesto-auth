@@ -101,6 +101,15 @@ class Api {
     .then(res => this._checkResponse(res));
   }
 
+  // Изменение лайка
+  changeLikeCardStatus(id, bool){
+    if(bool){
+      return this.addLike(id);
+    }else{
+      return this.removeLike(id);
+    }
+  }
+
   // Смена аватара
   changeAvatar(url){
     return fetch(this._url + '/users/me/avatar' , {
