@@ -8,6 +8,7 @@ import ImagePopup from './ImagePopup';
 import api from '../utils/Api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 function App() {
 
@@ -81,6 +82,14 @@ function App() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
   }
 
+  function handleUpdateAvatar(data){
+    api.changeAvatar(data.avatar)
+    .then(result => {
+      setCurrentUser(result);
+      setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
+    })
+  }  
+
   return (
     <CurrentUserContext.Provider value={currentUser} >
       <div className="App page" >
@@ -94,14 +103,16 @@ function App() {
             onAddPlace={handleAddPlace}
             onCardClick={handleCardClick}
           />   
-            {/* Добавление автара*/}
-          <PopupWithForm isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}
-          onOutsideClose={closePopupOutside} title={'Обновить аватар'} name='avatar' buttonName='Сохранить'>
-            <input type="url" className="popup__input popup__input_place_avatar" name="avatar-sourse" id="avatar-sourse" placeholder="https://somewebsite.com/someimage.jpg" required />
-            <label className="popup__input-error" htmlFor="avatar-sourse" id="avatar-sourse-error"></label>
-          </PopupWithForm>
+            {/* Добавление автара========================*/}
+            <EditAvatarPopup 
+              isOpen={isEditAvatarPopupOpen} 
+              onClose={closeAllPopups}
+              onOutsideClose={closePopupOutside}
+              onUpdateAvatar={handleUpdateAvatar}
+            >
+            </EditAvatarPopup>
 
-            {/* Изменение профиля*/}
+            {/* Изменение профиля=========================*/}
           <EditProfilePopup 
             isOpen={isEditProfilePopupOpen} 
             onClose={closeAllPopups} 
@@ -110,7 +121,7 @@ function App() {
           >   
           </EditProfilePopup>
 
-            {/* Добавление карточки*/}
+            {/* Добавление карточки=======================*/}
           <PopupWithForm isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onOutsideClose={closePopupOutside} title='Новое место'  name='form_card' buttonName="Создать">
             <input type="text" className="popup__input popup__input_place_place-name" name="card-name" id="card-name" placeholder="Название" minLength="2" maxLength="30" required />
             <label className="popup__input-error" htmlFor="card-name" id="card-name-error"></label>
@@ -118,7 +129,7 @@ function App() {
             <label className="popup__input-error" htmlFor="card-sourse" id="card-sourse-error"></label>            
           </PopupWithForm>
           
-            {/* Просмотр карточки*/}
+            {/* Просмотр карточки==========================*/}
           <ImagePopup card={selectedCard} onClose={closeAllPopups} onOutsideClose={closePopupOutside} />
 
           <Footer />            
