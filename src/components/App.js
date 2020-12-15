@@ -9,6 +9,7 @@ import api from '../utils/Api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null); 
   const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
     
 
   const handleAddPlace = ()=> setIsAddPlacePopupOpen(true);  
@@ -90,6 +92,42 @@ function App() {
     })
   }  
 
+  useEffect(()=>{
+    api.getCards()
+    .then(promise =>{
+      setCards(promise.map(item => item));
+    })
+    .catch(result => console.error(result));
+  },[]);
+
+  function handleCardLike(card){
+    const isLiked = card.likes.some(like => like._id === currentUser._id);
+    api.changeLikeCardStatus(card._id, !isLiked)
+    .then(newCard => {
+      const newCards = cards.map(item => item.id === card._id? newCard: item);
+      setCards(newCards);
+    })
+  }
+
+  function handleCardDelete(id){
+    api.removeCard(id)
+    .then(response => {
+      const newCards = cards.filter(item => item._id !== id)
+      setCards(newCards);
+    })
+  }
+
+  function handleAddPlaceSubmit(data){
+    api.addCard(data.name, data.link)
+    .then(result => {
+      setCards([result, ...cards]);
+      setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+    })
+
+  }
+
+
+
   return (
     <CurrentUserContext.Provider value={currentUser} >
       <div className="App page" >
@@ -102,6 +140,9 @@ function App() {
             onEditProfile={handleEditProfile}      
             onAddPlace={handleAddPlace}
             onCardClick={handleCardClick}
+            cards = {cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
           />   
             {/* Добавление автара========================*/}
             <EditAvatarPopup 
@@ -122,12 +163,13 @@ function App() {
           </EditProfilePopup>
 
             {/* Добавление карточки=======================*/}
-          <PopupWithForm isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onOutsideClose={closePopupOutside} title='Новое место'  name='form_card' buttonName="Создать">
-            <input type="text" className="popup__input popup__input_place_place-name" name="card-name" id="card-name" placeholder="Название" minLength="2" maxLength="30" required />
-            <label className="popup__input-error" htmlFor="card-name" id="card-name-error"></label>
-            <input type="url" className="popup__input popup__input_place_source" name="card-sourse" id="card-sourse" placeholder="Ссылка на картинку" required />
-            <label className="popup__input-error" htmlFor="card-sourse" id="card-sourse-error"></label>            
-          </PopupWithForm>
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onOutsideClose={closePopupOutside} 
+              onAddPlace={handleAddPlaceSubmit}
+            >              
+            </AddPlacePopup>     
           
             {/* Просмотр карточки==========================*/}
           <ImagePopup card={selectedCard} onClose={closeAllPopups} onOutsideClose={closePopupOutside} />

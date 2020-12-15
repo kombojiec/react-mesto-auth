@@ -5,18 +5,22 @@ import CurrentUserContext from '../contexts/CurrentUserContext'
 
 
 const EditAvatarPopup = (props) =>{
+
   const currentUser = useContext(CurrentUserContext);
   const inputRef = useRef();
   const [avatar, setAvatar] = useState('')
+
   useEffect(()=>{
     (setAvatar(currentUser.avatar)) 
   },[currentUser])
+
   function handleSubmit(event){
     event.preventDefault();
     props.onUpdateAvatar({
       avatar: inputRef.current.value
     })
   }
+  
   return(
     <PopupWithForm 
       isOpen={props.isOpen}
