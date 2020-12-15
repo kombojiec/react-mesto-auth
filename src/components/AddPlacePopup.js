@@ -17,6 +17,7 @@ const AddPlacePopup = (props) =>{
   const handleSubmit = (event)=>{
     event.preventDefault();
     props.onAddPlace({name, link})
+    event.target.reset()
   } 
 
   return (

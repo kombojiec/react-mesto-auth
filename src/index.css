@@ -41,6 +41,7 @@
 @import url(./blocks/element/__like-counter/element__like-counter.css);
 @import url(./blocks/element/__like/_active/element__like_active.css);
 @import url(./blocks/element/__basket/element__basket.css);
+@import url(./blocks/element/__basket/_hiden/element__basket_hiden.css);
 
 /* ====================popup========================== */
 @import url(./blocks/popup/popup.css);

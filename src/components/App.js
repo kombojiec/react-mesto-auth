@@ -3,7 +3,6 @@ import '../index.css';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import api from '../utils/Api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -32,7 +31,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setSelectedCard(null);
+    setSelectedCard(null);    
   };
 
   const closePopupOutside =(event)=>{
@@ -80,16 +79,17 @@ function App() {
 
   function handleUpdateUser(data){
     api.setUser(data)
-    .then(result => setCurrentUser(result));
-    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+    .then(result => setCurrentUser(result)) 
+    .finally(()=> setIsEditProfilePopupOpen(!isEditProfilePopupOpen))
   }
 
   function handleUpdateAvatar(data){
     api.changeAvatar(data.avatar)
     .then(result => {
-      setCurrentUser(result);
-      setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
+      setCurrentUser(result);      
     })
+    .catch(result => console.log(result))
+    .finally(()=> setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen));
   }  
 
   useEffect(()=>{
@@ -104,7 +104,7 @@ function App() {
     const isLiked = card.likes.some(like => like._id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked)
     .then(newCard => {
-      const newCards = cards.map(item => item.id === card._id? newCard: item);
+      const newCards = cards.map(item => item._id === newCard._id? newCard: item);
       setCards(newCards);
     })
   }
@@ -121,8 +121,10 @@ function App() {
     api.addCard(data.name, data.link)
     .then(result => {
       setCards([result, ...cards]);
-      setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+      // setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
     })
+    .catch(result => console.log(result))
+    .finally(()=> setIsAddPlacePopupOpen(!isAddPlacePopupOpen));
 
   }
 

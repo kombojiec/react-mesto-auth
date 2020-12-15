@@ -1,5 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
-import api from '../utils/Api';
+import React, {useContext} from 'react';
 import Card from './Card';
 import CurrentUserContext from '../contexts/CurrentUserContext'
 
@@ -7,32 +6,6 @@ const Main = (props) => {
 
   // const [cards, setCards] = useState([]);
   const currentUser = useContext(CurrentUserContext);
-
-  // function handleCardLike(card){
-  //   const isLiked = card.likes.some(like => like._id === currentUser._id);
-  //   api.changeLikeCardStatus(card._id, !isLiked)
-  //   .then(newCard => {
-  //     const newCards = cards.map(item => item.id === card._id? newCard: item);
-  //     setCards(newCards);
-  //   })
-  // }
-
-  // function handleCardDelete(id){
-  //   api.removeCard(id)
-  //   .then(response => {
-  //     const newCards = cards.filter(item => item._id !== id)
-  //     setCards(newCards);
-  //   })
-  // }
-
-  // useEffect(()=>{
-  //   api.getCards()
-  //   .then(promise =>{
-  //     setCards(promise.map(item => item));
-  //   })
-  //   .catch(result => console.error(result));
-  // },[]);
-
 
   return(
     <main className="content">
