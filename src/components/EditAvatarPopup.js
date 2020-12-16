@@ -2,8 +2,6 @@ import React, {useRef, useContext, useEffect, useState} from 'react';
 import PopupWithForm from './PopupWithForm';
 import CurrentUserContext from '../contexts/CurrentUserContext'
 
-
-
 const EditAvatarPopup = (props) =>{
 
   const currentUser = useContext(CurrentUserContext);

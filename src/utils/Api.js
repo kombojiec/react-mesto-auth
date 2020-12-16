@@ -1,4 +1,4 @@
-import {ownerInfo} from './constants';
+import ownerInfo from './constants';
 
 class Api {
   constructor(info) {

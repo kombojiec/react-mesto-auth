@@ -5,6 +5,7 @@ import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import api from '../utils/Api';
+import ownerInfo from '../utils/constants'
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -24,7 +25,7 @@ function App() {
   const [cards, setCards] = useState([]);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
   const [errorResponse, setErrorResponse] = useState('')
-  const [isLoading, setIsLoading] = useState('')
+  const [isLoading, setIsLoading] = useState('')  
   
 
   const handleAddPlace = ()=> setIsAddPlacePopupOpen(true);  
@@ -86,6 +87,7 @@ function App() {
   useEffect(()=>{
     api.getUser()
     .then(response => {
+      ownerInfo.id = response._id;
       setCurrentUser(response);
     })
     .catch((response)=> {
@@ -166,8 +168,7 @@ function App() {
     .finally(()=> {
       setIsLoading('');
     });
-  }
-  
+  }  
 
   function handleAddPlaceSubmit(data){
     api.addCard(data.name, data.link)
@@ -187,7 +188,6 @@ function App() {
   const handleButtonLoading = (value) =>{
     setIsLoading(value);
   }
-
 
   return (
     <CurrentUserContext.Provider value={currentUser} >

@@ -1,4 +1,4 @@
-import React, {useEffect,useRef, useContext} from  'react';
+import React, {useEffect,useRef} from  'react';
 
 const PopupWithForm = (props) => {
 
@@ -6,9 +6,7 @@ const PopupWithForm = (props) => {
 
   useEffect(()=>{
     !props.isOpen && form.current.reset();
-  },[props.isOpen])
-
-  
+  },[props.isOpen])  
   
   return(
     <section className={`popup popup_${props.name} ${props.isOpen && 'popup_opened'}`} onClick={props.onOutsideClose}>
