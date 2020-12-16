@@ -16,6 +16,7 @@ const AddPlacePopup = (props) =>{
 
   const handleSubmit = (event)=>{
     event.preventDefault();
+    props.onChangeButton('Loading...');
     props.onAddPlace({name, link})
     event.target.reset()
   } 
@@ -25,6 +26,7 @@ const AddPlacePopup = (props) =>{
       isOpen={props.isOpen}
       onClose={props.onClose}
       onOutsideClose={props.onOutsideClose} 
+      isLoading={props.isLoading}
       onSubmit={handleSubmit}
       title='Новое место'  
       name='form_card' 

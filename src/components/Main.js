@@ -4,7 +4,6 @@ import CurrentUserContext from '../contexts/CurrentUserContext'
 
 const Main = (props) => {
 
-  // const [cards, setCards] = useState([]);
   const currentUser = useContext(CurrentUserContext);
 
   return(
@@ -40,17 +39,7 @@ const Main = (props) => {
             />
           )    
         })}
-      </section>  
-
-      {/* <!-- Попап подтверждения удаления --> */}
-      <section className="popup popup_remove">
-        <form className="popup__form ">
-          <h2 className="popup__title popup__title_type_dark">Вы уверены?</h2>
-          <button className="popup__button popup__button_remove" type="button">Да</button>
-          <button className="popup__close popup__close_place_remove" type="submit"></button>
-        </form>
-      </section>
-      
+      </section>        
     </main>  
   )
 };
