@@ -32,7 +32,6 @@ function App() {
   const handleEditProfile = ()=> setIsEditProfilePopupOpen(true);  
   const handleCardClick = (card)=> {
     setSelectedCard(card);
-    console.log(selectedCard);
     setImageShow(true)
   };
 
@@ -40,7 +39,6 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    // setSelectedCard(null);    
     setImageShow(false)
     setIsPopupConfirmation(false)
     setIsErrorPopupOpen(false)
