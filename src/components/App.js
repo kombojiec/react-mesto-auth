@@ -94,13 +94,14 @@ function App() {
     api.setUser(data)
     .then(result => {
       setCurrentUser(result);
+      setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
     }) 
     .catch((response)=>{
       setErrorResponse(response);
       setIsErrorPopupOpen(true)
     })
     .finally(()=> {
-      setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
+      setIsLoading('');
     })
   }
 
@@ -108,12 +109,15 @@ function App() {
     api.changeAvatar(data.avatar)
     .then(result => {
       setCurrentUser(result);      
+      setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
     })
     .catch(result => {
       setErrorResponse(result);
       setIsErrorPopupOpen(true)
     })
-    .finally(()=> setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen));
+    .finally(()=> {
+      setIsLoading('');
+    });
   }  
 
   useEffect(()=>{
@@ -149,12 +153,15 @@ function App() {
     .then(response => {
       const newCards = cards.filter(item => item._id !== isPopupConfirmation);
       setCards(newCards);
+      setIsPopupConfirmation(false);
     })
     .catch(result => {
       setErrorResponse(result);
       setIsErrorPopupOpen(true)
     })
-    .finally(()=> setIsPopupConfirmation(false));
+    .finally(()=> {
+      setIsLoading('');
+    });
   }
   
 
@@ -162,13 +169,13 @@ function App() {
     api.addCard(data.name, data.link)
     .then(result => {
       setCards([result, ...cards]);
+      setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
     })
     .catch(result => {
       setErrorResponse(result);
       setIsErrorPopupOpen(true)
     })
     .finally(()=> {
-      setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
       setIsLoading('');
     });
   }
@@ -197,6 +204,8 @@ function App() {
               {/* Добавление автара========================*/}
               <EditAvatarPopup 
                 isOpen={isEditAvatarPopupOpen} 
+                isLoading={isLoading}
+                onChangeButton={handleButtonLoading}
                 onClose={closeAllPopups}
                 onOutsideClose={closePopupOutside}
                 onUpdateAvatar={handleUpdateAvatar}
@@ -206,6 +215,8 @@ function App() {
               {/* Изменение профиля=========================*/}
             <EditProfilePopup 
               isOpen={isEditProfilePopupOpen} 
+              isLoading={isLoading}
+              onChangeButton={handleButtonLoading}
               onClose={closeAllPopups} 
               onOutsideClose={closePopupOutside}
               onUpdateUser={handleUpdateUser}           
@@ -229,6 +240,8 @@ function App() {
             {/* <!-- Попап подтверждения удаления --> */}
             <PopupConfirmation 
               isOpen={isPopupConfirmation}
+              isLoading={isLoading}
+              onChangeButton={handleButtonLoading}
               onClose={closeAllPopups}
               onOutsideClose={closePopupOutside} 
               onDelete={handleDeleteCard}

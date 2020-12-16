@@ -16,6 +16,7 @@ const EditAvatarPopup = (props) =>{
 
   function handleSubmit(event){
     event.preventDefault();
+    props.onChangeButton('Loading...');
     props.onUpdateAvatar({
       avatar: inputRef.current.value
     })
@@ -24,6 +25,7 @@ const EditAvatarPopup = (props) =>{
   return(
     <PopupWithForm 
       isOpen={props.isOpen}
+      isLoading={props.isLoading}
       onClose={props.onClose}
       onOutsideClose={props.onOutsideClose}
       onSubmit={handleSubmit}
