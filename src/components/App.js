@@ -18,7 +18,8 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isPopupConfirmation, setIsPopupConfirmation] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null); 
+  const [selectedCard, setSelectedCard] = useState({}); 
+  const [imageShow, setImageShow] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
@@ -29,13 +30,18 @@ function App() {
   const handleAddPlace = ()=> setIsAddPlacePopupOpen(true);  
   const handleEditAvatar =()=> setIsEditAvatarPopupOpen(true); 
   const handleEditProfile = ()=> setIsEditProfilePopupOpen(true);  
-  const handleCardClick = (card)=> {setSelectedCard(card);};
+  const handleCardClick = (card)=> {
+    setSelectedCard(card);
+    console.log(selectedCard);
+    setImageShow(true)
+  };
 
   const closeAllPopups = ()=>{
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setSelectedCard(null);    
+    // setSelectedCard(null);    
+    setImageShow(false)
     setIsPopupConfirmation(false)
     setIsErrorPopupOpen(false)
   };
@@ -50,7 +56,7 @@ function App() {
     const popupOpened = ()=>{
       if(isEditAvatarPopupOpen || 
         isEditProfilePopupOpen || 
-        selectedCard ||
+        imageShow ||
         isPopupConfirmation ||
         isErrorPopupOpen ||
         isAddPlacePopupOpen){return true;}
@@ -76,7 +82,7 @@ function App() {
     };    
 
   },[isEditAvatarPopupOpen, isEditProfilePopupOpen,
-    selectedCard, isAddPlacePopupOpen, 
+    imageShow, isAddPlacePopupOpen, 
     isPopupConfirmation, isErrorPopupOpen]);
 
   useEffect(()=>{
@@ -235,7 +241,11 @@ function App() {
             </AddPlacePopup>     
             
             {/* Просмотр карточки==========================*/}
-            <ImagePopup card={selectedCard} onClose={closeAllPopups} onOutsideClose={closePopupOutside} />
+            <ImagePopup 
+              card={selectedCard} 
+              isOpen={imageShow}
+              onClose={closeAllPopups} 
+              onOutsideClose={closePopupOutside} />
 
             {/* <!-- Попап подтверждения удаления --> */}
             <PopupConfirmation 
