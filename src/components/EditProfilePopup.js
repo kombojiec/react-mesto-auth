@@ -1,21 +1,12 @@
-import React, {useState, useContext, useEffect, useRef} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import PopupWithForm from './PopupWithForm';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
 const EditProfilePopup = (props) =>{
 
-  const inputName = useRef();
-  const inputDescription = useRef();
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
   const currentUser = useContext(CurrentUserContext);
-
-  useEffect(()=>{
-    if(!props.isOpen){
-      inputName.current.value = currentUser.name;
-      inputDescription.current.value = currentUser.about;
-    }
-  },[props.isOpen, currentUser])
+  const [name, setName] = useState(currentUser.name);
+  const [description, setDescription] = useState(currentUser.about);
 
   const handleNameChange = (event => {
     setName(event.target.value)
@@ -27,7 +18,7 @@ const EditProfilePopup = (props) =>{
   useEffect(()=>{
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser])
+  }, [currentUser, props.isOpen])
 
   function handleSubmit(event){
     event.preventDefault();
@@ -46,9 +37,9 @@ const EditProfilePopup = (props) =>{
       onOutsideClose={props.onOutsideClose} 
       title={'Редактировать профиль'} name='form_profile' 
       buttonName='Сохранить' onSubmit={handleSubmit} >
-      <input type="text" className="popup__input popup__input_place_name" name="name" id="edit-name" minLength="2" maxLength="40" required ref={inputName} onChange={handleNameChange}/>
+      <input type="text" className="popup__input popup__input_place_name" name="name" id="edit-name" minLength="2" maxLength="40" value={name} onChange={handleNameChange}/>
       <label className="popup__input-error" htmlFor="edit-name" id="edit-name-error"></label>
-      <input type="text" className="popup__input popup__input_place_business" name="about" id="edit-business" minLength="2" maxLength="200" required ref={inputDescription} onChange={handleDescriptionChange} />
+      <input type="text" className="popup__input popup__input_place_business" name="about" id="edit-business" minLength="2" maxLength="200" required value={description} onChange={handleDescriptionChange} />
       <label className="popup__input-error" htmlFor="edit-business" id="edit-business-error"></label>
     </PopupWithForm>
   )
