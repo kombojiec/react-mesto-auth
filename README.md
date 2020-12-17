@@ -16,3 +16,5 @@
 
 **[Макет на проектную работу](https://www.figma.com/file/StZjf8HnoeLdiXS7dYrLAh/JavaScript.-Sprint-4)**, по которому реализован этот проект содержит десктопную и  
 мобильную  версии проекта. 
+
+Some changes here...
