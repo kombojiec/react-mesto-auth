@@ -60,5 +60,4 @@ const EditProfilePopup = (props) =>{
   )
 
 }
-
 export default EditProfilePopup;
