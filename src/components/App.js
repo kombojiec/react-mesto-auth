@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Switch, Route } from "react-router-dom";
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -12,6 +13,10 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup'
 import PopupConfirmation from './PopupConfirmation';
 import ErrorPopup from './ErrorPopup';
+import { Register } from "./Register";
+import { Login } from "./Login";
+import { ProtectedRoute } from "./ProtectedRoute";
+// import PopupAuth from "./PopupAuth";
 
 function App() {
 
@@ -26,8 +31,9 @@ function App() {
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
   const [errorResponse, setErrorResponse] = useState('')
   const [isLoading, setIsLoading] = useState('')  
+  const [loggedIn, setLoggedIn] = useState(true)
   
-
+  console.log(currentUser)
   const handleAddPlace = ()=> setIsAddPlacePopupOpen(true);  
   const handleEditAvatar =()=> setIsEditAvatarPopupOpen(true); 
   const handleEditProfile = ()=> setIsEditProfilePopupOpen(true);  
@@ -44,7 +50,6 @@ function App() {
     setIsPopupConfirmation(false)
     setIsErrorPopupOpen(false)
   };
-
   const closePopupOutside =(event)=>{
     if(event.target === event.currentTarget){
       closeAllPopups();
@@ -189,86 +194,98 @@ function App() {
     setIsLoading(value);
   }
 
+
   return (
-    <CurrentUserContext.Provider value={currentUser} >
-        <div className="App page" >
-          <div className="page__container"  >  
-      
-            <Header />
+    <Switch>    
+      <Route path='/sign-up' component={Login} />
+      <Route path='/sign-in' component={Register} />
+      {/* <ProtectedRoute 
+        loggedIn={loggedIn}
+        user={currentUser}  
+        component = {Main}
+      > */}
+          
+        <CurrentUserContext.Provider value={currentUser} >
+            <div className="App page" >
+              <div className="page__container"  >  
+          
+                <Header buttonText='logout' mail={'em@il.com'}/>
+                <Main     
+                  onEditAvatar={handleEditAvatar}      
+                  onEditProfile={handleEditProfile}      
+                  onAddPlace={handleAddPlace}
+                  onCardClick={handleCardClick}
+                  cards = {cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={confirmDelete}              
+                />   
+                  {/* Добавление автара========================*/}
+                  <EditAvatarPopup 
+                    isOpen={isEditAvatarPopupOpen} 
+                    isLoading={isLoading}
+                    onChangeButton={handleButtonLoading}
+                    onClose={closeAllPopups}
+                    onOutsideClose={closePopupOutside}
+                    onUpdateAvatar={handleUpdateAvatar}
+                  >
+                  </EditAvatarPopup>
 
-            <Main     
-              onEditAvatar={handleEditAvatar}      
-              onEditProfile={handleEditProfile}      
-              onAddPlace={handleAddPlace}
-              onCardClick={handleCardClick}
-              cards = {cards}
-              onCardLike={handleCardLike}
-              onCardDelete={confirmDelete}              
-            />   
-              {/* Добавление автара========================*/}
-              <EditAvatarPopup 
-                isOpen={isEditAvatarPopupOpen} 
-                isLoading={isLoading}
-                onChangeButton={handleButtonLoading}
-                onClose={closeAllPopups}
-                onOutsideClose={closePopupOutside}
-                onUpdateAvatar={handleUpdateAvatar}
-              >
-              </EditAvatarPopup>
+                  {/* Изменение профиля=========================*/}
+                <EditProfilePopup 
+                  isOpen={isEditProfilePopupOpen} 
+                  isLoading={isLoading}
+                  onChangeButton={handleButtonLoading}
+                  onClose={closeAllPopups} 
+                  onOutsideClose={closePopupOutside}
+                  onUpdateUser={handleUpdateUser}           
+                >   
+                </EditProfilePopup>
 
-              {/* Изменение профиля=========================*/}
-            <EditProfilePopup 
-              isOpen={isEditProfilePopupOpen} 
-              isLoading={isLoading}
-              onChangeButton={handleButtonLoading}
-              onClose={closeAllPopups} 
-              onOutsideClose={closePopupOutside}
-              onUpdateUser={handleUpdateUser}           
-            >   
-            </EditProfilePopup>
+                {/* Добавление карточки=======================*/}
+                <AddPlacePopup
+                  isOpen={isAddPlacePopupOpen}
+                  isLoading={isLoading}
+                  onChangeButton={handleButtonLoading}
+                  onClose={closeAllPopups}
+                  onOutsideClose={closePopupOutside} 
+                  onAddPlace={handleAddPlaceSubmit}
+                >              
+                </AddPlacePopup>     
+                
+                {/* Просмотр карточки==========================*/}
+                <ImagePopup 
+                  card={selectedCard} 
+                  isOpen={imageShow}
+                  onClose={closeAllPopups} 
+                  onOutsideClose={closePopupOutside} />
 
-            {/* Добавление карточки=======================*/}
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              isLoading={isLoading}
-              onChangeButton={handleButtonLoading}
-              onClose={closeAllPopups}
-              onOutsideClose={closePopupOutside} 
-              onAddPlace={handleAddPlaceSubmit}
-            >              
-            </AddPlacePopup>     
-            
-            {/* Просмотр карточки==========================*/}
-            <ImagePopup 
-              card={selectedCard} 
-              isOpen={imageShow}
-              onClose={closeAllPopups} 
-              onOutsideClose={closePopupOutside} />
+                {/* <!-- Попап подтверждения удаления --> */}
+                <PopupConfirmation 
+                  isOpen={isPopupConfirmation}
+                  isLoading={isLoading}
+                  onChangeButton={handleButtonLoading}
+                  onClose={closeAllPopups}
+                  onOutsideClose={closePopupOutside} 
+                  onDelete={handleDeleteCard}
+                >
+                </PopupConfirmation>
+                
+                {/* Вывод ошибки==========================*/}
+                <ErrorPopup
+                  isOpen={isErrorPopupOpen}
+                  onClose={closeAllPopups}
+                  onOutsideClose={closePopupOutside} 
+                  error={errorResponse}
+                >
+                </ErrorPopup>
 
-            {/* <!-- Попап подтверждения удаления --> */}
-            <PopupConfirmation 
-              isOpen={isPopupConfirmation}
-              isLoading={isLoading}
-              onChangeButton={handleButtonLoading}
-              onClose={closeAllPopups}
-              onOutsideClose={closePopupOutside} 
-              onDelete={handleDeleteCard}
-            >
-            </PopupConfirmation>
-            
-            {/* Вывод ошибки==========================*/}
-            <ErrorPopup
-              isOpen={isErrorPopupOpen}
-              onClose={closeAllPopups}
-              onOutsideClose={closePopupOutside} 
-              error={errorResponse}
-            >
-            </ErrorPopup>
-
-            <Footer />            
-          </div>
-        </div>
-    </CurrentUserContext.Provider>  
+                <Footer />            
+              </div>
+            </div>
+        </CurrentUserContext.Provider>  
+        
+      {/* </ProtectedRoute> */}
+    </Switch>
   );
 }
 
