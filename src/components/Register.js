@@ -1,15 +1,13 @@
 
 import React,{  } from "react";
-import Header from "./Header";
 import {AuthForm} from "./AuthForm";
-import PopupAuth from "./PopupAuth";
 
 export const Register = props => {
 
   return (
-    <div className='page page_type_auth' >
+    <div className='page_type_auth' >
       <div className="page__container">  
-      <Header buttonText={'login'} />
+      {/* <Header buttonText={'login'} /> */}
       <AuthForm 
         title='Регистрация'
         button='Зарегистрироваться'
