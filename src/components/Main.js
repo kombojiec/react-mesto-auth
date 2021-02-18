@@ -3,7 +3,6 @@ import Card from './Card';
 import CurrentUserContext from '../contexts/CurrentUserContext'
 
 const Main = (props) => {
-console.log(props);
   const currentUser = useContext(CurrentUserContext);
 
   return(

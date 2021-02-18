@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -13,13 +13,13 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup'
 import PopupConfirmation from './PopupConfirmation';
 import ErrorPopup from './ErrorPopup';
-import { Register } from "./Register";
-import { Login } from "./Login";
+import Register  from "./Register";
+import Login from "./Login";
 import { ProtectedRoute } from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
+import {checkToken} from './Auth'
 
-function App() {
-
+function App(props) {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -29,9 +29,14 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
-  const [errorResponse, setErrorResponse] = useState('')
-  const [isLoading, setIsLoading] = useState('')  
-  const [loggedIn, setLoggedIn] = useState(true)
+  const [errorResponse, setErrorResponse] = useState('');
+  const [isLoading, setIsLoading] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [infoTooltipIsOpen, setInfoTooltipIsOpen] = useState({
+    state: false,
+    result: null
+  })
+  const [email, setEmail] = useState('')
   
   const handleAddPlace = ()=> setIsAddPlacePopupOpen(true);  
   const handleEditAvatar =()=> setIsEditAvatarPopupOpen(true); 
@@ -45,9 +50,10 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setImageShow(false)
-    setIsPopupConfirmation(false)
-    setIsErrorPopupOpen(false)
+    setImageShow(false);
+    setIsPopupConfirmation(false);
+    setIsErrorPopupOpen(false);
+    setInfoTooltipIsOpen({state: false, result: null });
   };
   const closePopupOutside =(event)=>{
     if(event.target === event.currentTarget){
@@ -55,12 +61,27 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if(jwt){
+      checkToken(jwt)
+      .then(res => {
+        if (res){
+          setLoggedIn(true);   
+        }        
+      })
+      .then(() => props.history.push('/'))
+      .catch(error => console.log(error));
+    }
+  },[props.history])
+
   useEffect(()=>{
     const popupOpened = ()=>{
       if(isEditAvatarPopupOpen || 
         isEditProfilePopupOpen || 
         imageShow ||
         isPopupConfirmation ||
+        infoTooltipIsOpen.state ||
         isErrorPopupOpen ||
         isAddPlacePopupOpen){return true;}
       return false;
@@ -84,7 +105,7 @@ function App() {
       document.removeEventListener('keydown', escapeOutside);
     };    
 
-  },[isEditAvatarPopupOpen, isEditProfilePopupOpen,
+  },[isEditAvatarPopupOpen,infoTooltipIsOpen.state, isEditProfilePopupOpen,
     imageShow, isAddPlacePopupOpen, 
     isPopupConfirmation, isErrorPopupOpen]);
 
@@ -193,18 +214,46 @@ function App() {
     setIsLoading(value);
   }
 
+  const infoTooltipHandler = (state, authorized = null) => {
+    setInfoTooltipIsOpen({state, result: authorized})
+  }
 
+  const logOut = () => {
+    localStorage.removeItem('jwt');
+    props.history.push('/signup')
+    setEmail('')
+  }
+
+  const logIn = (email) => {
+    setLoggedIn(true)
+    setEmail(email)
+  }
+
+   
   return (
 
     <CurrentUserContext.Provider value={currentUser} >  
       <div className="App page" >
         <div className="page__container"  >            
-          <Header buttonText='logout' mail={'em@il.com'}/>
-          {/* <InfoTooltip /> */}
+          <Header 
+            // buttonText='logout' 
+            mail={email}
+            onLogOut={logOut}
+          />
+
           <Switch>    
-            <Route path='/sign-up' component={Login} />
-            <Route path='/sign-in' component={Register} />
-            <ProtectedRoute 
+            <Route path='/signup'>
+              <Register onRegister={infoTooltipHandler} />
+            </Route>
+            
+            <Route path='/signin' >
+              <Login 
+                onRegister={infoTooltipHandler} 
+                onLoggedIn={logIn}
+              />
+            </Route>            
+
+            <ProtectedRoute path='/'
               loggedIn={loggedIn}
               user={currentUser}  
               onEditAvatar={handleEditAvatar}      
@@ -216,8 +265,17 @@ function App() {
               onCardDelete={confirmDelete}
               component = {Main}
             > 
-            </ProtectedRoute>
+          </ProtectedRoute>
           </Switch>
+
+          {/* Результат авторизации========================*/}
+          <InfoTooltip 
+            isOpen={infoTooltipIsOpen.state}            
+            onClose={closeAllPopups}
+            onOutsideClose={closePopupOutside}
+            result={infoTooltipIsOpen.result}
+            message={infoTooltipIsOpen.message}
+          />
 
           {/* Добавление автара========================*/}
           <EditAvatarPopup 
@@ -287,4 +345,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);
