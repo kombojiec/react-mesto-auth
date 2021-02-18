@@ -20,11 +20,6 @@ const EditProfilePopup = (props) =>{
     setDescription(event.target.value);
   })
 
-  useEffect(()=>{
-    setName(currentUser.name);
-    setDescription(currentUser.about);
-  }, [currentUser])
-
   function handleSubmit(event){
     event.preventDefault();
     props.onChangeButton('Loading...');

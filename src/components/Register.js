@@ -1,7 +1,6 @@
 
 import React,{ useState } from "react";
 import {AuthForm} from "./AuthForm";
-import {Registration} from './Auth';
 import {withRouter } from "react-router-dom";
 
 
@@ -22,14 +21,7 @@ const Register = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault()
-    Registration(data.email, data.password)
-    .then(res => {
-      props.onRegister(true, 'success')
-      props.history.push('/signin')
-    })
-    .catch(error => {
-      props.onRegister(true,'failure')
-    });
+    props.onRegUser(data)
   }
 
   return (

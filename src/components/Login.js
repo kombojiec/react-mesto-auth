@@ -1,6 +1,5 @@
 import React,{ useState } from "react";
 import {AuthForm} from "./AuthForm";
-import {Authorization} from './Auth'
 import { withRouter } from "react-router-dom";
 
 const Login = props => {
@@ -20,26 +19,7 @@ const Login = props => {
 
   const submitHandler = (event) => {
     event.preventDefault()
-    Authorization(data.email, data.password)
-    .then(res => {
-      if(res.token){
-        props.onLoggedIn(data.email);
-        localStorage.setItem('jwt', res.token);
-        props.history.push('/');
-      }else{
-        return
-      }
-    })
-    .catch(error => {
-      props.onRegister(true,'failure')
-      if(error.status === 400){
-        console.log('Не корректно введены данные')
-      }else if(error.status === 401){
-        console.log('Пользователь не найден')
-      }else{
-        console.log('Ошибка' + error.status)
-      }
-    });
+    props.onLogInUser(data)
   }
 
   return (

@@ -17,7 +17,8 @@ import Register  from "./Register";
 import Login from "./Login";
 import { ProtectedRoute } from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
-import {checkToken} from './Auth'
+import {checkToken} from '../utils/auth'
+import {registration, authorization} from '../utils/auth';
 
 function App(props) {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -67,7 +68,8 @@ function App(props) {
       checkToken(jwt)
       .then(res => {
         if (res){
-          setLoggedIn(true);   
+          setEmail(res.data.email)  
+          setLoggedIn(true); 
         }        
       })
       .then(() => props.history.push('/'))
@@ -229,6 +231,40 @@ function App(props) {
     setEmail(email)
   }
 
+  const registerUser = (data) => {
+    registration(data.email, data.password)
+    .then(res => {
+      infoTooltipHandler(true, 'success')
+      props.history.push('/signin')
+    })
+    .catch(error => {
+      infoTooltipHandler(true,'failure')
+    });
+  }
+
+  const logInUser = (data) => {
+    authorization(data.email, data.password)
+    .then(res => {
+      if(res.token){
+        logIn(data.email);
+        localStorage.setItem('jwt', res.token);
+        props.history.push('/');
+      }else{
+        return
+      }
+    })
+    .catch(error => {
+      infoTooltipHandler(true,'failure')
+      if(error.status === 400){
+        console.log('Не корректно введены данные')
+      }else if(error.status === 401){
+        console.log('Пользователь не найден')
+      }else{
+        console.log('Ошибка' + error.status)
+      }
+    });
+  }
+
    
   return (
 
@@ -236,19 +272,20 @@ function App(props) {
       <div className="App page" >
         <div className="page__container"  >            
           <Header 
-            // buttonText='logout' 
             mail={email}
             onLogOut={logOut}
           />
 
           <Switch>    
             <Route path='/signup'>
-              <Register onRegister={infoTooltipHandler} />
+              <Register 
+                onRegUser={registerUser}
+              />
             </Route>
             
             <Route path='/signin' >
               <Login 
-                onRegister={infoTooltipHandler} 
+                onLogInUser={logInUser} 
                 onLoggedIn={logIn}
               />
             </Route>            

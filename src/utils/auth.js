@@ -7,7 +7,7 @@ function checkResponse(res){
   return Promise.reject(res);
 }
 
-export const Registration = (email, password) => {
+export const registration = (email, password) => {
   return fetch(`${BASE_URL}/signup`,{
     method: 'post',
     headers: {
@@ -18,7 +18,7 @@ export const Registration = (email, password) => {
   .then(res => checkResponse(res))
 }
 
-export const Authorization = (email, password) => {
+export const authorization = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'post',
     headers: {
