@@ -289,7 +289,6 @@ function App(props) {
                 onLoggedIn={logIn}
               />
             </Route>            
-
             <ProtectedRoute path='/'
               loggedIn={loggedIn}
               user={currentUser}  
