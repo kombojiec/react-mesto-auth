@@ -1,5 +1,5 @@
 {
-  "homepage": "https://kombojiec.github.io/mesto-react/",
+  "homepage": "",
   "name": "mesto-react",
   "version": "0.1.0",
   "private": false,
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "npm run build && scp -r ./build/* kombojiec@178.154.251.128:/home/kombojiec/mesto-frontend",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
